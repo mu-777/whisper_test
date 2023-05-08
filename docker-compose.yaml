@@ -1,0 +1,24 @@
+version: '3'
+services:
+  whisper:
+    build: 
+      context: ./docker
+      dockerfile: 'Dockerfile'
+      shm_size: '16gb'
+    image: whisper
+    container_name: whisper
+    volumes:
+      - /etc/group:/etc/group:ro
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/shadow:/etc/shadow:ro
+      - $HOME/.vscode-server:$HOME/.vscode-server
+      - $PWD:$PWD
+    working_dir: $PWD
+    user: 1000:1000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
